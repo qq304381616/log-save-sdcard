@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 /**
- * ÔÚmanifestÖĞÅäÖÃ android:configChanges="orientation"
- * orientation ÆÁÄ»ÔÚ×İÏòºÍºáÏò¼äĞı×ª¡£
- * keyboardHidden ¼üÅÌÏÔÊ¾»òÒş²Ø¡£
- * fontScale ÓÃ»§±ä¸üÁËÊ×Ñ¡µÄ×ÖÌå´óĞ¡¡£
- * locale ÓÃ»§Ñ¡ÔñÁË²»Í¬µÄÓïÑÔÉè¶¨¡£
- * keyboard ¼üÅÌÀàĞÍ±ä¸ü£¬ÀıÈçÊÖ»ú´Ó12¼üÅÌÇĞ»»µ½È«¼üÅÌ
- * touchscreen»ònavigation ¼üÅÌ»òµ¼º½·½Ê½±ä»¯£¬Ò»°ã²»»á·¢ÉúÕâÑùµÄÊÂ¼ş¡£
+ * åœ¨manifestä¸­é…ç½® android:configChanges="orientation"
+ * orientation å±å¹•åœ¨çºµå‘å’Œæ¨ªå‘é—´æ—‹è½¬ã€‚
+ * keyboardHidden é”®ç›˜æ˜¾ç¤ºæˆ–éšè—ã€‚
+ * fontScale ç”¨æˆ·å˜æ›´äº†é¦–é€‰çš„å­—ä½“å¤§å°ã€‚
+ * locale ç”¨æˆ·é€‰æ‹©äº†ä¸åŒçš„è¯­è¨€è®¾å®šã€‚
+ * keyboard é”®ç›˜ç±»å‹å˜æ›´ï¼Œä¾‹å¦‚æ‰‹æœºä»12é”®ç›˜åˆ‡æ¢åˆ°å…¨é”®ç›˜
+ * touchscreenæˆ–navigation é”®ç›˜æˆ–å¯¼èˆªæ–¹å¼å˜åŒ–ï¼Œä¸€èˆ¬ä¸ä¼šå‘ç”Ÿè¿™æ ·çš„äº‹ä»¶ã€‚
  * @author HL
  */
 public class MainActivity extends ActionBarActivity {
@@ -21,33 +21,33 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 
 		Configuration config = getResources().getConfiguration();
-		String screen = config.orientation == Configuration.ORIENTATION_LANDSCAPE ? "ºáÏòÆÁÄ»" : "ÊúÏòÆÁÄ»";
-		int mccCode = config.mcc;// mcc:»ñÈ¡ÒÆ¶¯ĞÅºÅµÄ¹ú¼ÒÂë
-		int mncCode = config.mnc; // mnc:»ñÈ¡ÒÆ¶¯ĞÅºÅµÄÍøÂçÂë
-		String naviName = config.orientation == Configuration.NAVIGATION_NONAV ? "Ã»ÓĞ·½Ïò¿ØÖÆ"
-				: config.orientation == Configuration.NAVIGATION_WHEEL ? "¹öÂÖ·½Ïò¿ØÖÆ"
-						: config.orientation == Configuration.NAVIGATION_DPAD ? "·½Ïò¼ü¿ØÖÆ·½Ïò" : "¹ì¼£Çò¿ØÖÆ·½Ïò";
-		String touchName = config.touchscreen == Configuration.TOUCHSCREEN_NOTOUCH ? "ÎŞ´¥ÃşÆÁ"
-				: config.touchscreen == Configuration.TOUCHSCREEN_STYLUS ? "´¥Ãş±ÊÊ½´¥ÃşÆÁ" : "½ÓÊÕÊÖÖ¸µÄ´¥ÃşÆÁ";
+		String screen = config.orientation == Configuration.ORIENTATION_LANDSCAPE ? "æ¨ªå‘å±å¹•" : "ç«–å‘å±å¹•";
+		int mccCode = config.mcc;// mcc:è·å–ç§»åŠ¨ä¿¡å·çš„å›½å®¶ç 
+		int mncCode = config.mnc; // mnc:è·å–ç§»åŠ¨ä¿¡å·çš„ç½‘ç»œç 
+		String naviName = config.orientation == Configuration.NAVIGATION_NONAV ? "æ²¡æœ‰æ–¹å‘æ§åˆ¶"
+				: config.orientation == Configuration.NAVIGATION_WHEEL ? "æ»šè½®æ–¹å‘æ§åˆ¶"
+						: config.orientation == Configuration.NAVIGATION_DPAD ? "æ–¹å‘é”®æ§åˆ¶æ–¹å‘" : "è½¨è¿¹çƒæ§åˆ¶æ–¹å‘";
+		String touchName = config.touchscreen == Configuration.TOUCHSCREEN_NOTOUCH ? "æ— è§¦æ‘¸å±"
+				: config.touchscreen == Configuration.TOUCHSCREEN_STYLUS ? "è§¦æ‘¸ç¬”å¼è§¦æ‘¸å±" : "æ¥æ”¶æ‰‹æŒ‡çš„è§¦æ‘¸å±";
 
-		// Èç¹ûµ±Ç°ÎªºáÆÁ
+		// å¦‚æœå½“å‰ä¸ºæ¨ªå±
 		if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			// ÉèÖÃÎªÊúÆÁ
+			// è®¾ç½®ä¸ºç«–å±
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		}
-		// Èç¹ûµ±Ç°ÎªÊúÆÁ
+		// å¦‚æœå½“å‰ä¸ºç«–å±
 		if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
-			// ÉèÖÃÎªºáÆÁ
+			// è®¾ç½®ä¸ºæ¨ªå±
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		}
 	}
 
 	/**
-	 * ¼àÌı android:configChanges="orientation"
+	 * ç›‘å¬ android:configChanges="orientation"
 	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		String screen = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? "ºáÆÁ" : "ÊúÆÁ";
+		String screen = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? "æ¨ªå±" : "ç«–å±";
 	}
 }

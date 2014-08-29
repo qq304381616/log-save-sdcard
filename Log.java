@@ -10,31 +10,31 @@ import java.util.Date;
 import android.util.Log;
 
 /**
- * ´øÈÕÖ¾ÎÄ¼şÊäÈëµÄ£¬ÓÖ¿É¿Ø¿ª¹ØµÄÈÕÖ¾µ÷ÊÔ
+ * å¸¦æ—¥å¿—æ–‡ä»¶è¾“å…¥çš„ï¼Œåˆå¯æ§å¼€å…³çš„æ—¥å¿—è°ƒè¯•
  * 
  * @author BaoHang
  * @version 1.0
  * @data 2012-2-20
  */
 public class MyLog {
-	private static Boolean MYLOG_SWITCH = true; // ÈÕÖ¾ÎÄ¼ş×Ü¿ª¹Ø
-	private static Boolean MYLOG_WRITE_TO_FILE = true;// ÈÕÖ¾Ğ´ÈëÎÄ¼ş¿ª¹Ø
-	private static char MYLOG_TYPE = 'v';// ÊäÈëÈÕÖ¾ÀàĞÍ£¬w´ú±íÖ»Êä³ö¸æ¾¯ĞÅÏ¢µÈ£¬v´ú±íÊä³öËùÓĞĞÅÏ¢
-	private static String MYLOG_PATH_SDCARD_DIR = "/sdcard/";// ÈÕÖ¾ÎÄ¼şÔÚsdcardÖĞµÄÂ·¾¶
-	private static int SDCARD_LOG_FILE_SAVE_DAYS = 0;// sd¿¨ÖĞÈÕÖ¾ÎÄ¼şµÄ×î¶à±£´æÌìÊı
-	private static String MYLOGFILEName = "Log.txt";// ±¾ÀàÊä³öµÄÈÕÖ¾ÎÄ¼şÃû³Æ
-	private static SimpleDateFormat myLogSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// ÈÕÖ¾µÄÊä³ö¸ñÊ½
-	private static SimpleDateFormat logfile = new SimpleDateFormat("yyyy-MM-dd");// ÈÕÖ¾ÎÄ¼ş¸ñÊ½
+	private static Boolean MYLOG_SWITCH = true; // æ—¥å¿—æ–‡ä»¶æ€»å¼€å…³
+	private static Boolean MYLOG_WRITE_TO_FILE = true;// æ—¥å¿—å†™å…¥æ–‡ä»¶å¼€å…³
+	private static char MYLOG_TYPE = 'v';// è¾“å…¥æ—¥å¿—ç±»å‹ï¼Œwä»£è¡¨åªè¾“å‡ºå‘Šè­¦ä¿¡æ¯ç­‰ï¼Œvä»£è¡¨è¾“å‡ºæ‰€æœ‰ä¿¡æ¯
+	private static String MYLOG_PATH_SDCARD_DIR = "/sdcard/";// æ—¥å¿—æ–‡ä»¶åœ¨sdcardä¸­çš„è·¯å¾„
+	private static int SDCARD_LOG_FILE_SAVE_DAYS = 0;// sdå¡ä¸­æ—¥å¿—æ–‡ä»¶çš„æœ€å¤šä¿å­˜å¤©æ•°
+	private static String MYLOGFILEName = "Log.txt";// æœ¬ç±»è¾“å‡ºçš„æ—¥å¿—æ–‡ä»¶åç§°
+	private static SimpleDateFormat myLogSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// æ—¥å¿—çš„è¾“å‡ºæ ¼å¼
+	private static SimpleDateFormat logfile = new SimpleDateFormat("yyyy-MM-dd");// æ—¥å¿—æ–‡ä»¶æ ¼å¼
 
-	public static void w(String tag, Object msg) { // ¾¯¸æĞÅÏ¢
+	public static void w(String tag, Object msg) { // è­¦å‘Šä¿¡æ¯
 		log(tag, msg.toString(), 'w');
 	}
 
-	public static void e(String tag, Object msg) { // ´íÎóĞÅÏ¢
+	public static void e(String tag, Object msg) { // é”™è¯¯ä¿¡æ¯
 		log(tag, msg.toString(), 'e');
 	}
 
-	public static void d(String tag, Object msg) {// µ÷ÊÔĞÅÏ¢
+	public static void d(String tag, Object msg) {// è°ƒè¯•ä¿¡æ¯
 		log(tag, msg.toString(), 'd');
 	}
 
@@ -67,7 +67,7 @@ public class MyLog {
 	}
 
 	/**
-	 * ¸ù¾İtag, msgºÍµÈ¼¶£¬Êä³öÈÕÖ¾
+	 * æ ¹æ®tag, msgå’Œç­‰çº§ï¼Œè¾“å‡ºæ—¥å¿—
 	 * 
 	 * @param tag
 	 * @param msg
@@ -77,7 +77,7 @@ public class MyLog {
 	 */
 	private static void log(String tag, String msg, char level) {
 		if (MYLOG_SWITCH) {
-			if ('e' == level && ('e' == MYLOG_TYPE || 'v' == MYLOG_TYPE)) { // Êä³ö´íÎóĞÅÏ¢
+			if ('e' == level && ('e' == MYLOG_TYPE || 'v' == MYLOG_TYPE)) { // è¾“å‡ºé”™è¯¯ä¿¡æ¯
 				Log.e(tag, msg);
 			} else if ('w' == level && ('w' == MYLOG_TYPE || 'v' == MYLOG_TYPE)) {
 				Log.w(tag, msg);
@@ -94,17 +94,17 @@ public class MyLog {
 	}
 
 	/**
-	 * ´ò¿ªÈÕÖ¾ÎÄ¼ş²¢Ğ´ÈëÈÕÖ¾
+	 * æ‰“å¼€æ—¥å¿—æ–‡ä»¶å¹¶å†™å…¥æ—¥å¿—
 	 * 
 	 * @return
 	 * **/
-	private static void writeLogtoFile(String mylogtype, String tag, String text) {// ĞÂ½¨»ò´ò¿ªÈÕÖ¾ÎÄ¼ş
+	private static void writeLogtoFile(String mylogtype, String tag, String text) {// æ–°å»ºæˆ–æ‰“å¼€æ—¥å¿—æ–‡ä»¶
 		Date nowtime = new Date();
 		String needWriteFiel = logfile.format(nowtime);
 		String needWriteMessage = myLogSdf.format(nowtime) + "    " + mylogtype + "    " + tag + "    " + text;
 		File file = new File(MYLOG_PATH_SDCARD_DIR, needWriteFiel + MYLOGFILEName);
 		try {
-			FileWriter filerWriter = new FileWriter(file, true);// ºóÃæÕâ¸ö²ÎÊı´ú±íÊÇ²»ÊÇÒª½ÓÉÏÎÄ¼şÖĞÔ­À´µÄÊı¾İ£¬²»½øĞĞ¸²¸Ç
+			FileWriter filerWriter = new FileWriter(file, true);// åé¢è¿™ä¸ªå‚æ•°ä»£è¡¨æ˜¯ä¸æ˜¯è¦æ¥ä¸Šæ–‡ä»¶ä¸­åŸæ¥çš„æ•°æ®ï¼Œä¸è¿›è¡Œè¦†ç›–
 			BufferedWriter bufWriter = new BufferedWriter(filerWriter);
 			bufWriter.write(needWriteMessage);
 			bufWriter.newLine();
@@ -117,9 +117,9 @@ public class MyLog {
 	}
 
 	/**
-	 * É¾³ıÖÆ¶¨µÄÈÕÖ¾ÎÄ¼ş
+	 * åˆ é™¤åˆ¶å®šçš„æ—¥å¿—æ–‡ä»¶
 	 * */
-	public static void delFile() {// É¾³ıÈÕÖ¾ÎÄ¼ş
+	public static void delFile() {// åˆ é™¤æ—¥å¿—æ–‡ä»¶
 		String needDelFiel = logfile.format(getDateBefore());
 		File file = new File(MYLOG_PATH_SDCARD_DIR, needDelFiel + MYLOGFILEName);
 		if (file.exists()) {
@@ -128,7 +128,7 @@ public class MyLog {
 	}
 
 	/**
-	 * µÃµ½ÏÖÔÚÊ±¼äÇ°µÄ¼¸ÌìÈÕÆÚ£¬ÓÃÀ´µÃµ½ĞèÒªÉ¾³ıµÄÈÕÖ¾ÎÄ¼şÃû
+	 * å¾—åˆ°ç°åœ¨æ—¶é—´å‰çš„å‡ å¤©æ—¥æœŸï¼Œç”¨æ¥å¾—åˆ°éœ€è¦åˆ é™¤çš„æ—¥å¿—æ–‡ä»¶å
 	 * */
 	private static Date getDateBefore() {
 		Date nowtime = new Date();
