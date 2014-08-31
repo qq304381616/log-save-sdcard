@@ -32,7 +32,17 @@ public class WifiFunction {
 		// 取得WifiInfo对象
 		meWifiInfo = meWifiManager.getConnectionInfo();
 	}
-
+	
+	//判断WiFi连接时是否能够访问Internet  
+	//或主动连接百度等判断是否有返回
+	public boolean hasWifiInternetAccess() {  
+	    WifiManager mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);  
+	    if(mWifiManager.isWifiEnabled()) {  
+	        return mWifiManager.pingSupplicant();  
+	    }  
+	    return false;  
+	} 
+	
 	// 打开wifi
 	public void openWifi() {
 		if (!meWifiManager.isWifiEnabled()) {
