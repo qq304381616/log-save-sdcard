@@ -15,96 +15,96 @@ import android.net.wifi.WifiManager.WifiLock;
 import android.widget.Toast;
 
 public class WifiFunction {
-	// ¶¨ÒåÒ»¸öWifiManager¶ÔÏó
+	// å®šä¹‰ä¸€ä¸ªWifiManagerå¯¹è±¡
 	private static WifiManager meWifiManager;
-	// ¶¨ÒåÒ»¸öWifiInfo¶ÔÏó
+	// å®šä¹‰ä¸€ä¸ªWifiInfoå¯¹è±¡
 	private WifiInfo meWifiInfo;
-	// É¨Ãè³öµÄÍøÂçÁ¬½ÓÁĞ±í
+	// æ‰«æå‡ºçš„ç½‘ç»œè¿æ¥åˆ—è¡¨
 	private List<ScanResult> meWifiList;
-	// ÍøÂçÁ¬½ÓÁĞ±í
+	// ç½‘ç»œè¿æ¥åˆ—è¡¨
 	private List<WifiConfiguration> meWifiConfigurations;
 	WifiLock meWifiLock;
 
 	public WifiFunction(Context context) {
-		// È¡µÃWifiManager¶ÔÏó
+		// å–å¾—WifiManagerå¯¹è±¡
 		meWifiManager = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
-		// È¡µÃWifiInfo¶ÔÏó
+		// å–å¾—WifiInfoå¯¹è±¡
 		meWifiInfo = meWifiManager.getConnectionInfo();
 	}
 
-	// ´ò¿ªwifi
+	// æ‰“å¼€wifi
 	public void openWifi() {
 		if (!meWifiManager.isWifiEnabled()) {
 			meWifiManager.setWifiEnabled(true);
 		}
 	}
 
-	// ¹Ø±Õwifi
+	// å…³é—­wifi
 	public void closeWifi() {
 		if (!meWifiManager.isWifiEnabled()) {
 			meWifiManager.setWifiEnabled(false);
 		}
 	}
 
-	// ¼ì²éµ±Ç°wifi×´Ì¬
+	// æ£€æŸ¥å½“å‰wifiçŠ¶æ€
 	public int checkState() {
 		return meWifiManager.getWifiState();
 	}
 
-	// Ëø¶¨wifiLock
+	// é”å®šwifiLock
 	public void acquireWifiLock() {
 		meWifiLock.acquire();
 	}
 
-	// ½âËøwifiLock
+	// è§£é”wifiLock
 	public void releaseWifiLock() {
-		// ÅĞ¶ÏÊÇ·ñËø¶¨
+		// åˆ¤æ–­æ˜¯å¦é”å®š
 		if (meWifiLock.isHeld()) {
 			meWifiLock.acquire();
 		}
 	}
 
-	// ´´½¨Ò»¸öwifiLock
+	// åˆ›å»ºä¸€ä¸ªwifiLock
 	public void createWifiLock() {
 		meWifiLock = meWifiManager.createWifiLock("test");
 	}
 
-	// µÃµ½ÅäÖÃºÃµÄÍøÂç
+	// å¾—åˆ°é…ç½®å¥½çš„ç½‘ç»œ
 	public List<WifiConfiguration> getConfiguration() {
 		return meWifiConfigurations;
 	}
 
-	// Ö¸¶¨ÅäÖÃºÃµÄÍøÂç½øĞĞÁ¬½Ó
+	// æŒ‡å®šé…ç½®å¥½çš„ç½‘ç»œè¿›è¡Œè¿æ¥
 	public void connetionConfiguration(int index) {
 		if (index > meWifiConfigurations.size()) {
 			return;
 		}
-		// Á¬½ÓÅäÖÃºÃÖ¸¶¨IDµÄÍøÂç
+		// è¿æ¥é…ç½®å¥½æŒ‡å®šIDçš„ç½‘ç»œ
 		meWifiManager.enableNetwork(meWifiConfigurations.get(index).networkId,
 				true);
 	}
 
 	public void startScan() {
 		meWifiManager.startScan();
-		// µÃµ½É¨Ãè½á¹û
+		// å¾—åˆ°æ‰«æç»“æœ
 		meWifiList = meWifiManager.getScanResults();
-		// µÃµ½ÅäÖÃºÃµÄÍøÂçÁ¬½Ó
+		// å¾—åˆ°é…ç½®å¥½çš„ç½‘ç»œè¿æ¥
 		meWifiConfigurations = meWifiManager.getConfiguredNetworks();
 	}
 
-	// µÃµ½ÍøÂçÁĞ±í
+	// å¾—åˆ°ç½‘ç»œåˆ—è¡¨
 	public List<ScanResult> getWifiList() {
 		return meWifiList;
 	}
 
-	// ²é¿´É¨Ãè½á¹û
+	// æŸ¥çœ‹æ‰«æç»“æœ
 	public StringBuffer lookUpScan() {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < meWifiList.size(); i++) {
 			sb.append("Index_" + new Integer(i + 1).toString() + ":");
-			// ½«ScanResultĞÅÏ¢×ª»»³ÉÒ»¸ö×Ö·û´®°ü
-			// ÆäÖĞ°Ñ°üÀ¨£ºBSSID¡¢SSID¡¢capabilities¡¢frequency¡¢level
+			// å°†ScanResultä¿¡æ¯è½¬æ¢æˆä¸€ä¸ªå­—ç¬¦ä¸²åŒ…
+			// å…¶ä¸­æŠŠåŒ…æ‹¬ï¼šBSSIDã€SSIDã€capabilitiesã€frequencyã€level
 			sb.append((meWifiList.get(i)).toString()).append("\n"+"~");
 		}
 		return sb;
@@ -122,29 +122,29 @@ public class WifiFunction {
 		return (meWifiInfo == null) ? 0 : meWifiInfo.getIpAddress();
 	}
 
-	// µÃµ½Á¬½ÓµÄID
+	// å¾—åˆ°è¿æ¥çš„ID
 	public int getNetWordId() {
 		return (meWifiInfo == null) ? 0 : meWifiInfo.getNetworkId();
 	}
 
-	// µÃµ½wifiInfoµÄËùÓĞĞÅÏ¢
+	// å¾—åˆ°wifiInfoçš„æ‰€æœ‰ä¿¡æ¯
 	public String getWifiInfo() {
 		return (meWifiInfo == null) ? "NULL" : meWifiInfo.toString();
 	}
 
-	// Ìí¼ÓÒ»¸öÍøÂç²¢Á¬½Ó
+	// æ·»åŠ ä¸€ä¸ªç½‘ç»œå¹¶è¿æ¥
 	public void addNetWork(WifiConfiguration configuration) {
 		int wcgId = meWifiManager.addNetwork(configuration);
 		meWifiManager.enableNetwork(wcgId, true);
 	}
 
-	// ¶Ï¿ªÖ¸¶¨IDµÄÍøÂç
+	// æ–­å¼€æŒ‡å®šIDçš„ç½‘ç»œ
 	public void disConnectionWifi(int netId) {
 		meWifiManager.disableNetwork(netId);
 		meWifiManager.disconnect();
 	}
 
-	// ÃÜÂëÁ¬½Ó·½Ê½
+	// å¯†ç è¿æ¥æ–¹å¼
 	public WifiConfiguration CreateWifiInfo(String SSID, String Password,
 			int Type) {
 		WifiConfiguration config = new WifiConfiguration();
