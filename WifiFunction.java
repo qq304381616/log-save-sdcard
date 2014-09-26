@@ -6,43 +6,61 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
-import android.widget.Toast;
+import android.util.Log;
 
 public class WifiFunction {
-	// 定义一个WifiManager对象
+
 	private static WifiManager meWifiManager;
-	// 定义一个WifiInfo对象
+
 	private WifiInfo meWifiInfo;
-	// 扫描出的网络连接列表
+
+	/** 扫描出的网络连接列表 */
 	private List<ScanResult> meWifiList;
 	// 网络连接列表
 	private List<WifiConfiguration> meWifiConfigurations;
-	WifiLock meWifiLock;
+
+	private WifiLock meWifiLock;
 
 	public WifiFunction(Context context) {
 		// 取得WifiManager对象
-		meWifiManager = (WifiManager) context
-				.getSystemService(Context.WIFI_SERVICE);
+		meWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		// 取得WifiInfo对象
 		meWifiInfo = meWifiManager.getConnectionInfo();
 	}
-	
-	//判断WiFi连接时是否能够访问Internet  
-	//或主动连接百度等判断是否有返回
-	public boolean hasWifiInternetAccess() {  
-	    WifiManager mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);  
-	    if(mWifiManager.isWifiEnabled()) {  
-	        return mWifiManager.pingSupplicant();  
-	    }  
-	    return false;  
-	} 
-	
+
+	// 判断WiFi连接时是否能够访问Internet
+	// 或主动连接百度等判断是否有返回
+	public boolean hasWifiInternetAccess(Context context) {
+		WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		if (mWifiManager.isWifiEnabled()) {
+			return mWifiManager.pingSupplicant();
+		}
+		return false;
+	}
+
+	/** 判断网络连接 */
+	public boolean isNetworkAvailable(Context context) {
+
+		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo info = manager.getActiveNetworkInfo();
+		if (info == null)
+			return false;
+
+		String typeName = info.getTypeName(); // 判断网络类型 "WIFI" or "MOBILE".
+		if (typeName == "MOBILE" && info.getExtraInfo().equals("cmwap")) {
+		}
+		return true;
+	}
+
 	// 打开wifi
 	public void openWifi() {
 		if (!meWifiManager.isWifiEnabled()) {
@@ -91,8 +109,7 @@ public class WifiFunction {
 			return;
 		}
 		// 连接配置好指定ID的网络
-		meWifiManager.enableNetwork(meWifiConfigurations.get(index).networkId,
-				true);
+		meWifiManager.enableNetwork(meWifiConfigurations.get(index).networkId, true);
 	}
 
 	public void startScan() {
@@ -115,7 +132,7 @@ public class WifiFunction {
 			sb.append("Index_" + new Integer(i + 1).toString() + ":");
 			// 将ScanResult信息转换成一个字符串包
 			// 其中把包括：BSSID、SSID、capabilities、frequency、level
-			sb.append((meWifiList.get(i)).toString()).append("\n"+"~");
+			sb.append((meWifiList.get(i)).toString()).append("\n" + "~");
 		}
 		return sb;
 	}
@@ -155,8 +172,7 @@ public class WifiFunction {
 	}
 
 	// 密码连接方式
-	public WifiConfiguration CreateWifiInfo(String SSID, String Password,
-			int Type) {
+	public WifiConfiguration CreateWifiInfo(String SSID, String Password, int Type) {
 		WifiConfiguration config = new WifiConfiguration();
 		config.allowedAuthAlgorithms.clear();
 		config.allowedGroupCiphers.clear();
@@ -175,13 +191,11 @@ public class WifiFunction {
 		{
 			config.hiddenSSID = true;
 			config.wepKeys[0] = "\"" + Password + "\"";
-			config.allowedAuthAlgorithms
-					.set(WifiConfiguration.AuthAlgorithm.SHARED);
+			config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
 			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
 			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
 			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
-			config.allowedGroupCiphers
-					.set(WifiConfiguration.GroupCipher.WEP104);
+			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
 			config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
 			config.wepTxKeyIndex = 0;
 		}
@@ -189,24 +203,20 @@ public class WifiFunction {
 		{
 			config.preSharedKey = "\"" + Password + "\"";
 			config.hiddenSSID = true;
-			config.allowedAuthAlgorithms
-					.set(WifiConfiguration.AuthAlgorithm.OPEN);
+			config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
 			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
 			config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-			config.allowedPairwiseCiphers
-					.set(WifiConfiguration.PairwiseCipher.TKIP);
+			config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
 			// config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
 			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-			config.allowedPairwiseCiphers
-					.set(WifiConfiguration.PairwiseCipher.CCMP);
+			config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
 			config.status = WifiConfiguration.Status.ENABLED;
 		}
 		return config;
 	}
 
 	public static WifiConfiguration IsExsits(String SSID) {
-		List<WifiConfiguration> existingConfigs = meWifiManager
-				.getConfiguredNetworks();
+		List<WifiConfiguration> existingConfigs = meWifiManager.getConfiguredNetworks();
 		for (WifiConfiguration existingConfig : existingConfigs) {
 			if (existingConfig.SSID.equals("\"" + SSID + "\"")) {
 				return existingConfig;
@@ -215,75 +225,61 @@ public class WifiFunction {
 		return null;
 	}
 
-	public static void setIpAssignment(String assign, WifiConfiguration wifiConf)
-			throws SecurityException, IllegalArgumentException,
-			NoSuchFieldException, IllegalAccessException {
+	public static void setIpAssignment(String assign, WifiConfiguration wifiConf) throws SecurityException,
+			IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
 		setEnumField(wifiConf, assign, "ipAssignment");
 	}
 
-	public static void setIpAddress(InetAddress addr, int prefixLength,
-			WifiConfiguration wifiConf) throws SecurityException,
-			IllegalArgumentException, NoSuchFieldException,
-			IllegalAccessException, NoSuchMethodException,
-			ClassNotFoundException, InstantiationException,
-			InvocationTargetException {
+	public static void setIpAddress(InetAddress addr, int prefixLength, WifiConfiguration wifiConf)
+			throws SecurityException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException,
+			NoSuchMethodException, ClassNotFoundException, InstantiationException, InvocationTargetException {
 		Object linkProperties = getField(wifiConf, "linkProperties");
 		if (linkProperties == null)
 			return;
 		Class laClass = Class.forName("android.net.LinkAddress");
-		Constructor laConstructor = laClass.getConstructor(new Class[] {
-				InetAddress.class, int.class });
+		Constructor laConstructor = laClass.getConstructor(new Class[] { InetAddress.class, int.class });
 		Object linkAddress = laConstructor.newInstance(addr, prefixLength);
 
-		ArrayList mLinkAddresses = (ArrayList) getDeclaredField(linkProperties,
-				"mLinkAddresses");
+		ArrayList mLinkAddresses = (ArrayList) getDeclaredField(linkProperties, "mLinkAddresses");
 		mLinkAddresses.clear();
 		mLinkAddresses.add(linkAddress);
 	}
-	public static void setGateway(InetAddress gateway,
-			WifiConfiguration wifiConf) throws SecurityException,
-			IllegalArgumentException, NoSuchFieldException,
-			IllegalAccessException, ClassNotFoundException,
-			NoSuchMethodException, InstantiationException,
-			InvocationTargetException {
+
+	public static void setGateway(InetAddress gateway, WifiConfiguration wifiConf) throws SecurityException,
+			IllegalArgumentException, NoSuchFieldException, IllegalAccessException, ClassNotFoundException,
+			NoSuchMethodException, InstantiationException, InvocationTargetException {
 		Object linkProperties = getField(wifiConf, "linkProperties");
 		if (linkProperties == null)
 			return;
 		Class routeInfoClass = Class.forName("android.net.RouteInfo");
-		Constructor routeInfoConstructor = routeInfoClass
-				.getConstructor(new Class[] { InetAddress.class });
+		Constructor routeInfoConstructor = routeInfoClass.getConstructor(new Class[] { InetAddress.class });
 		Object routeInfo = routeInfoConstructor.newInstance(gateway);
 
-		ArrayList mRoutes = (ArrayList) getDeclaredField(linkProperties,
-				"mRoutes");
+		ArrayList mRoutes = (ArrayList) getDeclaredField(linkProperties, "mRoutes");
 		mRoutes.clear();
 		mRoutes.add(routeInfo);
 	}
 
-	public static void setDNS(InetAddress dns, WifiConfiguration wifiConf)
-			throws SecurityException, IllegalArgumentException,
-			NoSuchFieldException, IllegalAccessException {
+	public static void setDNS(InetAddress dns, WifiConfiguration wifiConf) throws SecurityException,
+			IllegalArgumentException, NoSuchFieldException, IllegalAccessException {
 		Object linkProperties = getField(wifiConf, "linkProperties");
 		if (linkProperties == null)
 			return;
 
-		ArrayList<InetAddress> mDnses = (ArrayList<InetAddress>) getDeclaredField(
-				linkProperties, "mDnses");
+		ArrayList<InetAddress> mDnses = (ArrayList<InetAddress>) getDeclaredField(linkProperties, "mDnses");
 		mDnses.clear(); // or add a new dns address , here I just want to
 						// replace DNS1
 		mDnses.add(dns);
 	}
 
-	public static Object getField(Object obj, String name)
-			throws SecurityException, NoSuchFieldException,
+	public static Object getField(Object obj, String name) throws SecurityException, NoSuchFieldException,
 			IllegalArgumentException, IllegalAccessException {
 		Field f = obj.getClass().getField(name);
 		Object out = f.get(obj);
 		return out;
 	}
 
-	public static Object getDeclaredField(Object obj, String name)
-			throws SecurityException, NoSuchFieldException,
+	public static Object getDeclaredField(Object obj, String name) throws SecurityException, NoSuchFieldException,
 			IllegalArgumentException, IllegalAccessException {
 		Field f = obj.getClass().getDeclaredField(name);
 		f.setAccessible(true);
@@ -291,22 +287,20 @@ public class WifiFunction {
 		return out;
 	}
 
-	public static void setEnumField(Object obj, String value, String name)
-			throws SecurityException, NoSuchFieldException,
-			IllegalArgumentException, IllegalAccessException {
+	public static void setEnumField(Object obj, String value, String name) throws SecurityException,
+			NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		Field f = obj.getClass().getField(name);
 		f.set(obj, Enum.valueOf((Class<Enum>) f.getType(), value));
 	}
 
-	public static void set_static(String SSID,String static_ip,String static_gateway,String static_dns) {
+	public static void set_static(String SSID, String static_ip, String static_gateway, String static_dns) {
 
 		WifiConfiguration tempConfig = WifiFunction.IsExsits(SSID);
 		if (tempConfig != null) {
 			try {
 				setIpAssignment("STATIC", tempConfig);
 
-				setIpAddress(InetAddress.getByName(static_ip), 24,
-						tempConfig);
+				setIpAddress(InetAddress.getByName(static_ip), 24, tempConfig);
 
 				setGateway(InetAddress.getByName(static_gateway), tempConfig);
 
@@ -319,5 +313,5 @@ public class WifiFunction {
 			meWifiManager.updateNetwork(tempConfig);
 		}
 	}
-	
+
 }
