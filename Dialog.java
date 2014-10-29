@@ -14,6 +14,7 @@ import android.widget.EditText;
 public class MainDialog extends Activity implements Runnable {
 
 	/** 确定取消信息框 **/
+	//1
 	private static final int DIALOG_0 = 1;
 	/** 多个按钮信息框 **/
 	private static final int DIALOG_1 = 2;
