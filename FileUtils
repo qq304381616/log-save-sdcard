@@ -73,4 +73,15 @@
 				}
 			}
 		}
+		/** 查询可用空间大小  未测*/
+	public static long getAvailableSpace(File dir) {
+        try {
+            final StatFs stats = new StatFs(dir.getPath());
+            return (long) stats.getBlockSize() * (long) stats.getAvailableBlocks();
+        } catch (Throwable e) {
+            LogUtils.e(e.getMessage(), e);
+            return -1;
+        }
+
+    }
 	}
